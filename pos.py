@@ -59,6 +59,9 @@ with sqlite3.connect('POS.db') as conn:
         print("Dummy product exists")
         print(cur.execute("SELECT * FROM product WHERE pname='DUMMY'").fetchall())
 
+    cur.execute(
+        "INSERT INTO product (pname, price, stock) VALUES(?,?,?)", ("FAKE", 30, 250))
+
 
 class app:
     def __init__(self, master: Tk):
@@ -121,8 +124,12 @@ class app:
         self.login_btn.pack()
         # List item
         # Loop through each item in the database list
-        
-        
+        self.inventories = cur.execute("SELECT * FROM product")
+        for item in self.inventories:
+            self.display = Label(self.master, text=f"Name: {
+                                 item[0]}\tPrice: {item[1]}")
+            self.display.pack()
+
     def register(self):
         pass
 
